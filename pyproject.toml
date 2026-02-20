@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "quant-trading-bot"
+version = "0.1.0"
+description = "Quantitative Trading Bot"
+authors = ["Julius Appl <julius@appl.de>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+yfinance = "^1.2.0"
+pandas = "^3.0.1"
+numpy = "^2.4.2"
+matplotlib = "^3.10.8"
+backtrader = "^1.9.78.123"
+ta = "^0.11.0"
+alpaca-py = "^0.43.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = ["poetry.core.masonry.api"]
+
+[dependency-groups]
+dev = [
+    "jupyterlab (>=4.5.4,<5.0.0)",
+    "pytest (>=9.0.2,<10.0.0)",
+    "black (>=26.1.0,<27.0.0)",
+    "ruff (>=0.15.2,<0.16.0)",
+    "mypy (>=1.19.1,<2.0.0)"
+]
