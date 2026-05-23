@@ -7,7 +7,6 @@ from dotenv import load_dotenv
 from src.db.models import init_db
 from src.db.repository import get_watchlist
 from src.ingestion.market_data import fetch_and_store_market_data
-from src.ingestion.scrapers.reddit import scrape_reddit
 from src.ingestion.scrapers.rss import scrape_rss
 
 load_dotenv()
@@ -20,9 +19,8 @@ def run_ingestion(conn: sqlite3.Connection) -> None:
         return
     for ticker in tickers:
         rss_n = scrape_rss(conn, ticker)
-        reddit_n = scrape_reddit(conn, ticker)
         market_n = fetch_and_store_market_data(conn, ticker)
-        print(f"{ticker}: +{rss_n} RSS, +{reddit_n} Reddit, +{market_n} market rows")
+        print(f"{ticker}: +{rss_n} RSS headlines, +{market_n} market rows")
 
 
 def main() -> None:

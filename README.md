@@ -15,8 +15,8 @@ Three independent services coordinated via a shared SQLite database:
 │   Ingestion     │ ── headlines ──▶│  Signal Engine  │ ── signals ──▶│  API + Dashboard │
 │                 │                 │                 │                │                  │
 │  RSS scraper    │                 │  Embeddings     │                │  FastAPI REST    │
-│  Reddit scraper │                 │  Similarity     │                │  Streamlit UI    │
-│  yfinance data  │                 │  MLPClassifier  │                │                  │
+│  yfinance data  │                 │  Similarity     │                │  Streamlit UI    │
+│  9 news sources │                 │  MLPClassifier  │                │                  │
 └─────────────────┘                 └─────────────────┘                └──────────────────┘
 ```
 
@@ -49,7 +49,7 @@ poetry install
 cp .env.example .env
 ```
 
-Fill in your Reddit API credentials (free at [reddit.com/prefs/apps](https://www.reddit.com/prefs/apps) — choose **script** type).
+Edit `DB_PATH` and `MODEL_PATH` if needed — defaults work out of the box.
 
 ### 3. Create required directories
 
@@ -123,7 +123,7 @@ Open **http://localhost:8000/docs** for interactive Swagger UI.
 | Feature Engineering | pandas + numpy |
 | Charts | matplotlib |
 | Database | SQLite (stdlib) |
-| News Sources | RSS (Yahoo Finance, Reuters) + Reddit (PRAW) |
+| News Sources | RSS (Yahoo Finance, MarketWatch, WSJ, Bloomberg, CNBC, Seeking Alpha) |
 | Market Data | yfinance |
 | API | FastAPI + uvicorn |
 | Dashboard | Streamlit |
