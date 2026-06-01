@@ -1,16 +1,21 @@
-import importlib
+from pathlib import Path
 
 import streamlit as st
 
-st.set_page_config(page_title="Signal Engine", layout="wide", page_icon="📈")
+st.set_page_config(
+    page_title="Signal Engine",
+    page_icon="📈",
+    layout="wide",
+    initial_sidebar_state="expanded",
+)
 
-_PAGES = {
-    "Live Signals": "src.dashboard.pages.signals",
-    "Watchlist": "src.dashboard.pages.watchlist",
-    "Signal History": "src.dashboard.pages.history",
-    "Model": "src.dashboard.pages.model",
-}
+_HERE = Path(__file__).parent
 
-page = st.sidebar.radio("Navigation", list(_PAGES.keys()))
-module = importlib.import_module(_PAGES[page])
-module.render()
+pg = st.navigation([
+    st.Page(str(_HERE / "pages" / "signals.py"),  title="Live Signals",   icon="📡"),
+    st.Page(str(_HERE / "pages" / "watchlist.py"), title="Watchlist",      icon="📋"),
+    st.Page(str(_HERE / "pages" / "history.py"),   title="Signal History", icon="📊"),
+    st.Page(str(_HERE / "pages" / "model.py"),     title="Model",          icon="🤖"),
+])
+
+pg.run()

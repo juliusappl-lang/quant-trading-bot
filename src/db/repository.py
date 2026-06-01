@@ -29,7 +29,15 @@ def set_headline_processed(conn: sqlite3.Connection, headline_id: int) -> None:
     conn.commit()
 
 
-def get_processed_headlines_with_embeddings(conn: sqlite3.Connection, ticker: str) -> list[sqlite3.Row]:
+def get_processed_headlines_with_embeddings(
+    conn: sqlite3.Connection, ticker: str, exclude_id: Optional[int] = None
+) -> list[sqlite3.Row]:
+    if exclude_id is not None:
+        return conn.execute(
+            "SELECT * FROM headlines WHERE status = 'processed' AND embedding IS NOT NULL "
+            "AND ticker = ? AND id != ?",
+            (ticker, exclude_id),
+        ).fetchall()
     return conn.execute(
         "SELECT * FROM headlines WHERE status = 'processed' AND embedding IS NOT NULL AND ticker = ?",
         (ticker,),

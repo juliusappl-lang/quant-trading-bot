@@ -24,9 +24,14 @@ def _cosine_similarity(a: np.ndarray, b: np.ndarray) -> float:
     return float(np.dot(a, b) / denom)
 
 
-def find_top_matches(conn: sqlite3.Connection, query_vec: np.ndarray,
-                     ticker: str, top_k: int = 3) -> list[Match]:
-    rows = get_processed_headlines_with_embeddings(conn, ticker)
+def find_top_matches(
+    conn: sqlite3.Connection,
+    query_vec: np.ndarray,
+    ticker: str,
+    top_k: int = 3,
+    exclude_id: Optional[int] = None,
+) -> list[Match]:
+    rows = get_processed_headlines_with_embeddings(conn, ticker, exclude_id=exclude_id)
     if not rows:
         return []
 

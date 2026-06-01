@@ -18,7 +18,7 @@ def process_headline(conn: sqlite3.Connection, model: SignalModel, headline_id: 
     embedding = embed_text(row["headline"])
     set_headline_embedding(conn, headline_id, serialise(embedding))
 
-    matches = find_top_matches(conn, embedding, ticker=row["ticker"], top_k=3)
+    matches = find_top_matches(conn, embedding, ticker=row["ticker"], top_k=3, exclude_id=headline_id)
     features = build_feature_vector(embedding, matches, headline=row["headline"])
 
     signal, confidence = model.predict(features)

@@ -1,22 +1,27 @@
 import numpy as np
 import joblib
-from sklearn.neural_network import MLPClassifier
+from sklearn.ensemble import GradientBoostingClassifier
 
 LABELS = ["BUY", "SELL", "HOLD"]
 
 
 class SignalModel:
     def __init__(self) -> None:
-        self._clf: MLPClassifier | None = None
+        self._clf: GradientBoostingClassifier | None = None
 
-    def train(self, X: np.ndarray, y: np.ndarray) -> dict:
-        self._clf = MLPClassifier(
-            hidden_layer_sizes=(128, 64),
-            activation="relu",
-            max_iter=500,
+    def _build_clf(self) -> GradientBoostingClassifier:
+        return GradientBoostingClassifier(
+            n_estimators=200,
+            max_depth=3,
+            subsample=0.8,
+            learning_rate=0.05,
+            min_samples_leaf=5,
             random_state=42,
         )
-        self._clf.fit(X, y)
+
+    def train(self, X: np.ndarray, y: np.ndarray, sample_weight: np.ndarray | None = None) -> dict:
+        self._clf = self._build_clf()
+        self._clf.fit(X, y, sample_weight=sample_weight)
         preds = self._clf.predict(X)
         accuracy = float((preds == y).mean())
         return {"accuracy": accuracy, "n_samples": len(y)}

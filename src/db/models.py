@@ -9,7 +9,8 @@ CREATE TABLE IF NOT EXISTS headlines (
     url          TEXT,
     published_at DATETIME NOT NULL,
     embedding    BLOB,
-    status       TEXT DEFAULT 'pending'
+    status       TEXT DEFAULT 'pending',
+    UNIQUE(ticker, headline, published_at)
 );
 
 CREATE TABLE IF NOT EXISTS market_data (
@@ -46,5 +47,10 @@ def init_db(db_path: str) -> sqlite3.Connection:
     conn = sqlite3.connect(db_path, check_same_thread=False)
     conn.row_factory = sqlite3.Row
     conn.executescript(SCHEMA)
+    # Idempotent migration: add unique index if not present
+    conn.execute(
+        "CREATE UNIQUE INDEX IF NOT EXISTS idx_headlines_unique "
+        "ON headlines(ticker, headline, published_at)"
+    )
     conn.commit()
     return conn
